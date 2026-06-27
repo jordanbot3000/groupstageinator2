@@ -41,8 +41,9 @@ button,input{font-family:inherit;cursor:pointer;border:none;background:none}
 .app{display:flex;flex-direction:column;height:100dvh}
 
 /* ── HEADER ── */
-header{background:var(--navy);padding:calc(env(safe-area-inset-top)+10px) 16px 0;flex-shrink:0}
-.hdr{display:flex;align-items:center;gap:10px;margin-bottom:11px}
+header{background:var(--navy);padding:0 0 0;flex-shrink:0}
+.hdr-safe{height:env(safe-area-inset-top,47px);background:var(--navy)}
+.hdr{display:flex;align-items:center;gap:10px;margin-bottom:11px;padding:12px 16px 0}
 
 /* Icon in header — small ball */
 .hdr-icon{width:32px;height:32px;flex-shrink:0;border-radius:8px;overflow:hidden}
@@ -289,6 +290,7 @@ header{background:var(--navy);padding:calc(env(safe-area-inset-top)+10px) 16px 0
 <body>
 <div class="app">
 <header>
+  <div class="hdr-safe"></div>
   <div class="hdr">
     <div class="hdr-icon"><img src="icon-512.png" alt="GSI"></div>
     <div class="wm"><span class="c0">GROUP</span><span class="c1">STAGE</span><span class="c2">IN</span><span class="c3">A</span><span class="c4">TOR</span></div>
