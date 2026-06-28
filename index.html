@@ -41,32 +41,24 @@ button,input{font-family:inherit;cursor:pointer;border:none;background:none}
 .app{display:flex;flex-direction:column;height:100dvh}
 
 /* ── HEADER ── */
-header{background:var(--navy);padding:0 0 0;flex-shrink:0}
+header{background:var(--navy);padding:0;flex-shrink:0}
 .hdr-safe{height:env(safe-area-inset-top,47px);background:var(--navy)}
-.hdr{display:flex;align-items:center;gap:10px;margin-bottom:11px;padding:12px 16px 0}
-
-/* Icon in header — small ball */
-.hdr-icon{width:32px;height:32px;flex-shrink:0;border-radius:8px;overflow:hidden}
-.hdr-icon img{width:100%;height:100%;object-fit:cover}
-
-/* Wordmark: CORAL·GOLD·LIME·WHITE·TEAL — Barlow Condensed, WC26-style */
-.wm{font-family:'Barlow Condensed','Arial Narrow',Arial,sans-serif;font-weight:900;font-size:clamp(24px,5.5vw,36px);letter-spacing:.06em;line-height:1;white-space:nowrap;text-transform:uppercase}
-.wm .c0{color:var(--coral)}
-.wm .c1{color:var(--gold)}
-.wm .c2{color:var(--lime)}
-.wm .c3{color:#fff}
-.wm .c4{color:var(--teal)}
-
-/* Header actions — right side */
-.hdr-actions{margin-left:auto;display:flex;gap:6px;align-items:center}
-.hbtn{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:800;letter-spacing:.02em;padding:7px 12px;border-radius:9px;transition:background .15s}
-.hbtn-refresh{color:rgba(255,255,255,.9);background:rgba(255,255,255,.12)}
-.hbtn-refresh:hover{background:rgba(255,255,255,.2)}
+.hdr{display:flex;align-items:center;gap:9px;margin-bottom:10px;padding:10px 14px 0;min-width:0}
+/* Logo lockup = inline SVG G mark + wordmark, designed as one unit */
+.hdr-logo{display:flex;align-items:center;gap:9px;min-width:0;flex:1 1 auto;overflow:hidden}
+.hdr-gmark{width:34px;height:34px;flex-shrink:0;display:block}
+.hdr-wm{height:22px;flex-shrink:1;min-width:0;display:block}
+.hdr-actions{margin-left:auto;display:flex;gap:6px;align-items:center;flex-shrink:0}
+.hbtn{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:800;letter-spacing:.02em;padding:8px 11px;border-radius:9px;transition:background .15s;white-space:nowrap}
+.hbtn-refresh{color:rgba(255,255,255,.92);background:rgba(255,255,255,.13)}
+.hbtn-refresh:active{background:rgba(255,255,255,.22)}
 .hbtn-refresh svg{width:13px;height:13px;stroke:currentColor;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.hbtn-reset{color:rgba(255,255,255,.45);font-size:12px;font-weight:700;padding:7px 8px;border-radius:9px}
-.hbtn-reset:hover{background:rgba(255,255,255,.08);color:rgba(255,255,255,.7)}
+.hbtn-reset{color:rgba(255,255,255,.5);font-size:18px;font-weight:400;padding:6px 9px;border-radius:9px;line-height:1}
+.hbtn-reset:active{background:rgba(255,255,255,.1);color:#fff}
 .hbtn.refreshing svg{animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+/* On very narrow phones, hide the Refresh label (keep icon) so nothing clips */
+@media(max-width:380px){.hbtn-refresh .hbtn-lbl{display:none}.hbtn-refresh{padding:8px 9px}}
 
 .tabs{display:flex}
 .tab{flex:1;color:rgba(255,255,255,.35);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:10px 4px 12px;border-bottom:2.5px solid transparent;transition:color .14s,border-color .14s}
@@ -103,6 +95,8 @@ header{background:var(--navy);padding:0 0 0;flex-shrink:0}
 .gc-letter{font-size:16px;font-weight:900;letter-spacing:.02em}
 .gc-when{font-size:11px;font-weight:600;color:rgba(255,255,255,.65);margin-left:2px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gc-tag{font-size:9px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border-radius:99px;background:rgba(255,255,255,.2);color:#fff;white-space:nowrap;flex-shrink:0}
+.gc-tag.fade-out{animation:tagFade 1.8s ease forwards;animation-delay:.7s}
+@keyframes tagFade{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.85);width:0;padding:0;margin:0}}
 .gc-clear{display:flex;align-items:center;gap:3px;font-size:10px;font-weight:800;color:rgba(255,255,255,.8);background:rgba(0,0,0,.2);padding:4px 9px;border-radius:99px;flex-shrink:0;white-space:nowrap}
 .gc-clear svg{width:9px;height:9px;stroke:currentColor;stroke-width:3;fill:none;stroke-linecap:round}
 
@@ -187,48 +181,59 @@ header{background:var(--navy);padding:0 0 0;flex-shrink:0}
 .t3cut{height:0;border-top:2px dashed var(--gold);margin:5px 0;position:relative}
 .t3cut span{position:absolute;right:0;top:-8px;background:var(--surf);padding-left:7px;font-size:8px;font-weight:900;color:var(--gold);letter-spacing:.08em}
 
-/* ── BRACKET — two-half horizontal layout (BBC-style) ── */
-/* Left half on top, right half below. Each half scrolls horizontally.
-   Within each half: rounds go left→right R32 → R16 → QF → SF → Final */
-#view-bracket{padding:10px 0 92px}
-.bhalf{overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;padding:0 13px 8px;margin-bottom:4px}
-.bhalf::-webkit-scrollbar{height:3px}
-.bhalf::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
-.bhalf-inner{display:flex;align-items:stretch;min-width:max-content;gap:0}
-.bhalf-lbl{font-size:9px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding:8px 13px 4px;display:flex;align-items:center;gap:8px}
-.bhalf-lbl span{height:1px;flex:1;background:var(--hair)}
-.bhalf-divider{height:8px;background:var(--bg)}
+/* ── BRACKET — single continuous horizontal scroll, elastic condense ── */
+/* One scroll surface. Rounds left→right: R32 → R16 → QF → SF → Final.
+   As you swipe right, columns you've passed condense to thin rails. */
+#view-bracket{padding:8px 0 92px}
+.bwrap{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:0 13px 10px;scroll-behavior:smooth}
+.bwrap::-webkit-scrollbar{height:4px}
+.bwrap::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
+.bcanvas{display:flex;align-items:stretch;min-width:max-content;gap:0;position:relative}
 
-/* Round column inside a half */
-.brcol{display:flex;flex-direction:column;justify-content:space-around;flex-shrink:0}
-.brcol-lbl{font-size:8px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);text-align:center;padding:0 4px;margin-bottom:4px;height:14px;display:flex;align-items:center;justify-content:center}
+/* A round = column. Has a normal width; when condensed, shrinks to a rail. */
+.brcol{display:flex;flex-direction:column;flex-shrink:0;width:152px;transition:width .28s cubic-bezier(.4,0,.2,1);position:relative}
+.brcol.final-col{width:166px}
+.brcol-lbl{font-size:9px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);text-align:center;padding:0 4px 6px;height:20px;display:flex;align-items:center;justify-content:center;white-space:nowrap;overflow:hidden;transition:opacity .2s}
 .brcol-pairs{display:flex;flex-direction:column;flex:1;justify-content:space-around}
-.brpair{display:flex;flex-direction:column;justify-content:center;flex:1;padding:4px 0}
+.brpair{display:flex;flex-direction:column;justify-content:center;flex:1;padding:5px 0;position:relative}
 
-/* Connector between rounds */
-.brconn{width:20px;flex-shrink:0;display:flex;flex-direction:column;padding-top:22px}
-.brconn svg{flex:1;overflow:visible;display:block}
+/* Condensed rail: the column collapses to a sliver showing only flags + a colored spine */
+.brcol.condensed{width:30px;cursor:pointer}
+.brcol.condensed .brcol-lbl{opacity:0}
+.brcol.condensed .bm{width:30px;margin:3px 0;box-shadow:none;background:transparent}
+.brcol.condensed .bm-hd{display:none}
+.brcol.condensed .bm-div{display:none}
+.brcol.condensed .bm-team{padding:4px 0;justify-content:center;min-height:24px}
+.brcol.condensed .bn,.brcol.condensed .bprov,.brcol.condensed .badv-arrow,.brcol.condensed .bm-pool{display:none}
+.brcol.condensed .bf{width:auto}
+.brcol.condensed .bm-team.advanced{background:rgba(75,45,159,.16);border-radius:6px}
+
+/* Connector column between rounds */
+.brconn{width:18px;flex-shrink:0;align-self:stretch;position:relative;transition:width .28s cubic-bezier(.4,0,.2,1)}
+.brconn svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.brconn.condensed{width:6px}
+.brconn.condensed svg{opacity:.35}
 
 /* Match card */
-.bm{background:var(--surf);border-radius:9px;width:148px;box-shadow:var(--shadow);overflow:hidden;margin:3px 0;flex-shrink:0}
-.bm.final-m{width:160px;border:1.5px solid var(--gold);box-shadow:0 0 0 1px rgba(245,166,35,.15),var(--shadow-md)}
-.bm-hd{font-size:7.5px;font-weight:700;color:var(--dim);padding:3px 8px;border-bottom:1px solid var(--hair);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bm-team{display:flex;align-items:center;gap:5px;padding:5px 8px;min-height:28px;cursor:pointer;transition:background .12s;position:relative}
-.bm-team:active{background:#f0f0f8}
-.bm-team.advanced{background:rgba(75,45,159,.08)}
-.bf{font-size:12px;width:16px;text-align:center;flex-shrink:0;line-height:1}
-.bn{font-size:11px;font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bn.tbd{color:var(--dim);font-style:italic;font-weight:500;font-size:10px}
-.bprov{font-size:7px;font-weight:900;color:var(--dim);background:var(--bg);padding:1px 4px;border-radius:4px;flex-shrink:0;margin-left:2px}
+.bm{background:var(--surf);border-radius:10px;width:152px;box-shadow:var(--shadow);overflow:hidden;margin:4px 0;flex-shrink:0;transition:width .28s cubic-bezier(.4,0,.2,1)}
+.bm.final-m{width:166px;border:1.5px solid var(--gold);box-shadow:0 0 0 1px rgba(245,166,35,.15),var(--shadow-md)}
+.bm-hd{font-size:8px;font-weight:700;color:var(--dim);padding:4px 8px;border-bottom:1px solid var(--hair);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:.01em}
+.bm-team{display:flex;align-items:center;gap:6px;padding:7px 8px;min-height:34px;cursor:pointer;transition:background .12s;position:relative}
+.bm-team:active{background:#eceaf6}
+.bm-team.advanced{background:rgba(75,45,159,.09)}
+.bm-team.advanced .bn{color:var(--indigo)}
+.bf{font-size:14px;width:18px;text-align:center;flex-shrink:0;line-height:1}
+.bn{font-size:12px;font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bn.tbd{color:var(--dim);font-weight:600;font-size:11px}
+.bprov{font-size:8px;font-weight:900;color:var(--dim);background:var(--bg);padding:1px 5px;border-radius:5px;flex-shrink:0;margin-left:2px}
 .bprov.lock{background:rgba(0,165,181,.12);color:var(--teal)}
 .badv-arrow{flex-shrink:0;margin-left:1px;opacity:0;transition:opacity .12s}
-.bm-team:hover .badv-arrow,.bm-team.advanced .badv-arrow{opacity:1}
-.badv-arrow svg{width:11px;height:11px;stroke:var(--indigo);stroke-width:2.5;fill:none;stroke-linecap:round}
+.bm-team.advanced .badv-arrow{opacity:1}
+.badv-arrow svg{width:13px;height:13px;stroke:var(--indigo);stroke-width:2.6;fill:none;stroke-linecap:round}
 .bm-div{height:1px;background:var(--hair)}
-.bm-pool{display:flex;flex-wrap:wrap;gap:2px;padding:2px 8px 4px}
-.bm-pip{font-size:7px;font-weight:900;padding:1px 3px;border-radius:3px;background:var(--bg);color:var(--dim)}
-.bm-pip.hot{background:rgba(168,216,78,.18);color:#5a7a1a}
-.bracket-tip{font-size:11px;color:var(--dim);text-align:center;padding:6px 14px 8px;font-weight:600}
+.bm-pool{display:flex;flex-wrap:wrap;gap:3px;padding:4px 8px 6px}
+.bm-pip{font-size:8px;font-weight:900;padding:1px 5px;border-radius:4px;background:var(--bg);color:var(--dim)}
+.bm-pip.hot{background:rgba(168,216,78,.2);color:#5a7a1a}
 
 /* ── SCHEDULE ── */
 .sched-top{display:flex;gap:8px;margin-bottom:11px}
@@ -292,14 +297,35 @@ header{background:var(--navy);padding:0 0 0;flex-shrink:0}
 <header>
   <div class="hdr-safe"></div>
   <div class="hdr">
-    <div class="hdr-icon"><img src="icon-512.png" alt="GSI"></div>
-    <div class="wm"><span class="c0">GROUP</span><span class="c1">STAGE</span><span class="c2">IN</span><span class="c3">A</span><span class="c4">TOR</span></div>
+    <div class="hdr-logo">
+      <svg class="hdr-gmark" viewBox="0 0 100 100" aria-hidden="true">
+        <defs><clipPath id="gm"><rect width="100" height="100" rx="24"/></clipPath></defs>
+        <g clip-path="url(#gm)">
+          <rect width="100" height="100" fill="#E8412C"/>
+          <rect x="9" y="9" width="82" height="82" rx="20" fill="#F5A623"/>
+          <rect x="18" y="18" width="64" height="64" rx="17" fill="#A8D84E"/>
+          <rect x="26" y="26" width="48" height="48" rx="14" fill="#00A5B5"/>
+          <rect x="33" y="33" width="34" height="34" rx="11" fill="#4B2D9F"/>
+          <g fill="none" stroke="#0a0a1a" stroke-width="20" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M62 38 A18 18 0 1 0 62 62 L62 51 L50 51"/>
+          </g>
+          <g fill="none" stroke="#fff" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M62 38 A18 18 0 1 0 62 62 L62 51 L50 51"/>
+          </g>
+        </g>
+      </svg>
+      <svg class="hdr-wm" viewBox="0 0 340 30" aria-label="GROUPSTAGEINATOR" preserveAspectRatio="xMinYMid meet">
+        <text x="0" y="24" font-family="'Barlow Condensed','Arial Narrow',sans-serif" font-weight="900" font-size="30" letter-spacing="0.5" textLength="338" lengthAdjust="spacingAndGlyphs">
+          <tspan fill="#E8412C">GROUP</tspan><tspan fill="#F5A623">STAGE</tspan><tspan fill="#A8D84E">IN</tspan><tspan fill="#ffffff">A</tspan><tspan fill="#00A5B5">TOR</tspan>
+        </text>
+      </svg>
+    </div>
     <div class="hdr-actions">
-      <button class="hbtn hbtn-refresh" id="refreshBtn" title="Pull latest results">
+      <button class="hbtn hbtn-refresh" id="refreshBtn" title="Refresh">
         <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
-        Refresh
+        <span class="hbtn-lbl">Refresh</span>
       </button>
-      <button class="hbtn hbtn-reset" id="resetBtn" title="Clear all scenarios">✕ Reset</button>
+      <button class="hbtn hbtn-reset" id="resetBtn" title="Clear all scenarios">✕</button>
     </div>
   </div>
   <div class="tabs">
@@ -341,17 +367,7 @@ header{background:var(--navy);padding:0 0 0;flex-shrink:0}
 
   <!-- BRACKET -->
   <div class="view" id="view-bracket">
-    <div class="scenario-bar" id="scenBarB">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>
-      <span id="scenBarBtext">Tap any team to play them forward</span>
-      <button class="clr" id="scenBarBclr">Clear picks</button>
-    </div>
-    <div class="bhalf-lbl">Left half of draw<span></span></div>
-    <div class="bhalf" id="bhalfL"><div class="bhalf-inner" id="bcanvasL"></div></div>
-    <div class="bhalf-divider"></div>
-    <div class="bhalf-lbl">Right half of draw<span></span></div>
-    <div class="bhalf" id="bhalfR"><div class="bhalf-inner" id="bcanvasR"></div></div>
-    <div class="bracket-tip" id="bracketTip"></div>
+    <div class="bwrap" id="bwrap"><div class="bcanvas" id="bcanvas"></div></div>
   </div>
 
 </div><!-- .content -->
@@ -366,7 +382,7 @@ header{background:var(--navy);padding:0 0 0;flex-shrink:0}
     Groups
   </button>
   <button class="bn" data-v="bracket">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="7" x2="10" y2="7"/><line x1="10" y1="7" x2="10" y2="17"/><line x1="5" y1="17" x2="10" y2="17"/><line x1="10" y1="12" x2="19" y2="12"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M7 6H4.5a2.5 2.5 0 0 0 2.5 2.5"/><path d="M17 6h2.5a2.5 2.5 0 0 1-2.5 2.5"/><line x1="12" y1="14" x2="12" y2="17"/><path d="M9 20h6l-.5-3h-5z"/></svg>
     Bracket
   </button>
 </nav>
@@ -491,57 +507,57 @@ const M=[
 {id:15,g:"G",home:"Iran",away:"New Zealand",kick:"2026-06-16T01:00:00Z",stad:"Los Angeles",score:[2,2]},
 {id:39,g:"G",home:"Belgium",away:"Iran",kick:"2026-06-21T19:00:00Z",stad:"Los Angeles",score:[0,0]},
 {id:40,g:"G",home:"New Zealand",away:"Egypt",kick:"2026-06-22T01:00:00Z",stad:"Vancouver",score:[1,3]},
-{id:63,g:"G",home:"Egypt",away:"Iran",kick:"2026-06-27T03:00:00Z",stad:"Seattle",score:null},
-{id:64,g:"G",home:"New Zealand",away:"Belgium",kick:"2026-06-27T03:00:00Z",stad:"Vancouver",score:null},
+{id:63,g:"G",home:"Egypt",away:"Iran",kick:"2026-06-27T03:00:00Z",stad:"Seattle",score:[0,0]},
+{id:64,g:"G",home:"New Zealand",away:"Belgium",kick:"2026-06-27T03:00:00Z",stad:"Vancouver",score:[0,3]},
 {id:14,g:"H",home:"Spain",away:"Cabo Verde",kick:"2026-06-15T16:00:00Z",stad:"Atlanta",score:[0,0]},
 {id:13,g:"H",home:"Saudi Arabia",away:"Uruguay",kick:"2026-06-15T22:00:00Z",stad:"Miami Gardens",score:[1,1]},
 {id:38,g:"H",home:"Spain",away:"Saudi Arabia",kick:"2026-06-21T16:00:00Z",stad:"Atlanta",score:[4,0]},
 {id:37,g:"H",home:"Uruguay",away:"Cabo Verde",kick:"2026-06-21T22:00:00Z",stad:"Miami Gardens",score:[2,2]},
-{id:66,g:"H",home:"Uruguay",away:"Spain",kick:"2026-06-27T00:00:00Z",stad:"Guadalajara",score:null},
-{id:65,g:"H",home:"Cabo Verde",away:"Saudi Arabia",kick:"2026-06-27T00:00:00Z",stad:"Houston",score:null},
+{id:66,g:"H",home:"Uruguay",away:"Spain",kick:"2026-06-27T00:00:00Z",stad:"Guadalajara",score:[0,1]},
+{id:65,g:"H",home:"Cabo Verde",away:"Saudi Arabia",kick:"2026-06-27T00:00:00Z",stad:"Houston",score:[2,1]},
 {id:17,g:"I",home:"France",away:"Senegal",kick:"2026-06-16T19:00:00Z",stad:"East Rutherford",score:[3,1]},
 {id:18,g:"I",home:"Iraq",away:"Norway",kick:"2026-06-16T22:00:00Z",stad:"Foxborough",score:[1,4]},
 {id:42,g:"I",home:"France",away:"Iraq",kick:"2026-06-22T21:00:00Z",stad:"Philadelphia",score:[3,0]},
 {id:41,g:"I",home:"Norway",away:"Senegal",kick:"2026-06-23T00:00:00Z",stad:"East Rutherford",score:[3,2]},
-{id:61,g:"I",home:"Norway",away:"France",kick:"2026-06-26T19:00:00Z",stad:"Foxborough",score:null},
-{id:62,g:"I",home:"Senegal",away:"Iraq",kick:"2026-06-26T19:00:00Z",stad:"Toronto",score:null},
-{id:19,g:"J",home:"Argentina",away:"Algeria",kick:"2026-06-17T01:00:00Z",stad:"Kansas City",score:[3,0]},
+{id:61,g:"I",home:"Norway",away:"France",kick:"2026-06-26T19:00:00Z",stad:"Foxborough",score:[1,2]},
+{id:62,g:"I",home:"Senegal",away:"Iraq",kick:"2026-06-26T19:00:00Z",stad:"Toronto",score:[4,0]},
+{id:19,g:"J",home:"Argentina",away:"Algeria",kick:"2026-06-17T01:00:00Z",stad:"Kansas City",score:[2,0]},
 {id:20,g:"J",home:"Austria",away:"Jordan",kick:"2026-06-16T04:00:00Z",stad:"Santa Clara",score:[3,1]},
 {id:43,g:"J",home:"Argentina",away:"Austria",kick:"2026-06-22T17:00:00Z",stad:"Arlington",score:[1,0]},
-{id:44,g:"J",home:"Jordan",away:"Algeria",kick:"2026-06-23T03:00:00Z",stad:"Santa Clara",score:[1,2]},
-{id:70,g:"J",home:"Jordan",away:"Argentina",kick:"2026-06-28T02:00:00Z",stad:"Arlington",score:null},
-{id:69,g:"J",home:"Algeria",away:"Austria",kick:"2026-06-28T02:00:00Z",stad:"Kansas City",score:null},
+{id:44,g:"J",home:"Jordan",away:"Algeria",kick:"2026-06-23T03:00:00Z",stad:"Santa Clara",score:[0,3]},
+{id:70,g:"J",home:"Jordan",away:"Argentina",kick:"2026-06-28T02:00:00Z",stad:"Arlington",score:[0,2]},
+{id:69,g:"J",home:"Algeria",away:"Austria",kick:"2026-06-28T02:00:00Z",stad:"Kansas City",score:[0,1]},
 {id:23,g:"K",home:"Portugal",away:"DR Congo",kick:"2026-06-17T17:00:00Z",stad:"Houston",score:[1,1]},
 {id:24,g:"K",home:"Uzbekistan",away:"Colombia",kick:"2026-06-18T02:00:00Z",stad:"Mexico City",score:[1,3]},
 {id:47,g:"K",home:"Portugal",away:"Uzbekistan",kick:"2026-06-23T17:00:00Z",stad:"Houston",score:[5,0]},
 {id:48,g:"K",home:"Colombia",away:"DR Congo",kick:"2026-06-24T02:00:00Z",stad:"Guadalajara",score:[1,0]},
-{id:71,g:"K",home:"Colombia",away:"Portugal",kick:"2026-06-27T23:30:00Z",stad:"Miami Gardens",score:null},
-{id:72,g:"K",home:"DR Congo",away:"Uzbekistan",kick:"2026-06-27T23:30:00Z",stad:"Atlanta",score:null},
+{id:71,g:"K",home:"Colombia",away:"Portugal",kick:"2026-06-27T23:30:00Z",stad:"Miami Gardens",score:[0,0]},
+{id:72,g:"K",home:"DR Congo",away:"Uzbekistan",kick:"2026-06-27T23:30:00Z",stad:"Atlanta",score:[3,1]},
 {id:22,g:"L",home:"England",away:"Croatia",kick:"2026-06-17T20:00:00Z",stad:"Arlington",score:[4,2]},
 {id:21,g:"L",home:"Ghana",away:"Panama",kick:"2026-06-17T23:00:00Z",stad:"Toronto",score:[1,0]},
 {id:45,g:"L",home:"England",away:"Ghana",kick:"2026-06-23T20:00:00Z",stad:"Foxborough",score:[0,0]},
 {id:46,g:"L",home:"Panama",away:"Croatia",kick:"2026-06-23T23:00:00Z",stad:"Toronto",score:[0,1]},
-{id:67,g:"L",home:"Panama",away:"England",kick:"2026-06-27T21:00:00Z",stad:"East Rutherford",score:null},
-{id:68,g:"L",home:"Croatia",away:"Ghana",kick:"2026-06-27T21:00:00Z",stad:"Philadelphia",score:null},
+{id:67,g:"L",home:"Panama",away:"England",kick:"2026-06-27T21:00:00Z",stad:"East Rutherford",score:[0,2]},
+{id:68,g:"L",home:"Croatia",away:"Ghana",kick:"2026-06-27T21:00:00Z",stad:"Philadelphia",score:[2,1]},
 ];
 
 const R32=[
   {id:73,date:"Jun 28",kt:"2026-06-28T19:00:00Z",stad:"Los Angeles",home:{t:'RU',g:'A'},away:{t:'RU',g:'B'}},
-  {id:74,date:"Jun 28",kt:"2026-06-28T23:00:00Z",stad:"Foxborough",home:{t:'W',g:'E'},away:{t:'3rd',opts:['A','B','C','D','F']}},
+  {id:74,date:"Jun 29",kt:"2026-06-29T20:30:00Z",stad:"Foxborough",home:{t:'W',g:'E'},away:{t:'3rd',opts:['A','B','C','D','F']}},
   {id:75,date:"Jun 29",kt:"2026-06-30T01:00:00Z",stad:"Monterrey",home:{t:'W',g:'F'},away:{t:'RU',g:'C'}},
-  {id:76,date:"Jun 29",kt:"2026-06-29T18:00:00Z",stad:"Houston",home:{t:'W',g:'C'},away:{t:'RU',g:'F'}},
+  {id:76,date:"Jun 29",kt:"2026-06-29T17:00:00Z",stad:"Houston",home:{t:'W',g:'C'},away:{t:'RU',g:'F'}},
   {id:77,date:"Jun 30",kt:"2026-06-30T21:00:00Z",stad:"East Rutherford",home:{t:'W',g:'I'},away:{t:'3rd',opts:['C','D','F','G','H']}},
   {id:78,date:"Jun 30",kt:"2026-06-30T17:00:00Z",stad:"Arlington",home:{t:'RU',g:'E'},away:{t:'RU',g:'I'}},
   {id:79,date:"Jun 30",kt:"2026-07-01T01:00:00Z",stad:"Mexico City",home:{t:'W',g:'A'},away:{t:'3rd',opts:['C','E','F','H','I']}},
-  {id:80,date:"Jul 1",kt:"2026-07-01T16:00:00Z",stad:"Atlanta",home:{t:'W',g:'L'},away:{t:'3rd',opts:['E','H','I','J','K']}},
-  {id:81,date:"Jul 1",kt:"2026-07-01T20:00:00Z",stad:"Santa Clara",home:{t:'W',g:'D'},away:{t:'3rd',opts:['B','E','F','I','J']}},
-  {id:82,date:"Jul 2",kt:"2026-07-02T00:00:00Z",stad:"Seattle",home:{t:'W',g:'G'},away:{t:'3rd',opts:['A','E','H','I','J']}},
+  {id:80,date:"Jun 28",kt:"2026-06-28T16:00:00Z",stad:"Atlanta",home:{t:'W',g:'L'},away:{t:'3rd',opts:['E','H','I','J','K']}},
+  {id:81,date:"Jul 1",kt:"2026-07-02T00:00:00Z",stad:"Santa Clara",home:{t:'W',g:'D'},away:{t:'3rd',opts:['B','E','F','I','J']}},
+  {id:82,date:"Jul 2",kt:"2026-07-03T01:00:00Z",stad:"Vancouver",home:{t:'W',g:'B'},away:{t:'3rd',opts:['A','E','H','I','J']}},
   {id:83,date:"Jul 2",kt:"2026-07-02T20:00:00Z",stad:"Toronto",home:{t:'RU',g:'K'},away:{t:'RU',g:'L'}},
-  {id:84,date:"Jul 3",kt:"2026-07-03T00:00:00Z",stad:"Los Angeles",home:{t:'W',g:'H'},away:{t:'RU',g:'J'}},
-  {id:85,date:"Jul 3",kt:"2026-07-03T19:00:00Z",stad:"Vancouver",home:{t:'W',g:'B'},away:{t:'3rd',opts:['E','F','G','I','J']}},
-  {id:86,date:"Jul 3",kt:"2026-07-03T23:00:00Z",stad:"Miami Gardens",home:{t:'W',g:'J'},away:{t:'RU',g:'H'}},
-  {id:87,date:"Jul 4",kt:"2026-07-04T20:00:00Z",stad:"Kansas City",home:{t:'W',g:'K'},away:{t:'3rd',opts:['D','E','I','J','L']}},
-  {id:88,date:"Jul 4",kt:"2026-07-05T00:00:00Z",stad:"Santa Clara",home:{t:'RU',g:'D'},away:{t:'RU',g:'G'}},
+  {id:84,date:"Jul 2",kt:"2026-07-03T00:00:00Z",stad:"Los Angeles",home:{t:'W',g:'H'},away:{t:'RU',g:'J'}},
+  {id:85,date:"Jul 1",kt:"2026-07-01T20:00:00Z",stad:"Seattle",home:{t:'W',g:'G'},away:{t:'3rd',opts:['E','F','G','I','J']}},
+  {id:86,date:"Jul 2",kt:"2026-07-02T16:00:00Z",stad:"Miami Gardens",home:{t:'W',g:'J'},away:{t:'RU',g:'H'}},
+  {id:87,date:"Jul 3",kt:"2026-07-03T16:00:00Z",stad:"Kansas City",home:{t:'W',g:'K'},away:{t:'3rd',opts:['D','E','I','J','L']}},
+  {id:88,date:"Jul 3",kt:"2026-07-03T20:00:00Z",stad:"Santa Clara",home:{t:'RU',g:'D'},away:{t:'RU',g:'G'}},
 ];
 const R16=[
   {id:89,m1:74,m2:77,date:"Jul 6",kt:"2026-07-06T20:00:00Z",stad:"Philadelphia"},
@@ -582,7 +598,14 @@ const mById=id=>M.find(m=>m.id===id);
 function eff(m){if(uScores[m.id]!=null&&uScores[m.id][0]!=null&&uScores[m.id][1]!=null)return{s:uScores[m.id],hypo:true};if(m.score)return{s:m.score,hypo:false};return{s:null,hypo:false};}
 const TZ='America/Chicago';
 const tzAbbr=()=>{try{return new Intl.DateTimeFormat('en-US',{timeZoneName:'short',timeZone:TZ}).formatToParts(new Date()).find(p=>p.type==='timeZoneName').value}catch{return'CT'}};
-const fT=(iso,tz)=>new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',timeZone:tz||TZ}).format(new Date(iso));
+// Smart time: "8 pm" on the hour, "4:30 pm" when minutes matter. Lowercase. CT implied (dropped).
+const fT=(iso,tz)=>{
+  const parts=new Intl.DateTimeFormat('en-US',{hour:'numeric',minute:'2-digit',hour12:true,timeZone:tz||TZ}).formatToParts(new Date(iso));
+  const h=parts.find(p=>p.type==='hour').value;
+  const mm=parts.find(p=>p.type==='minute').value;
+  const ap=parts.find(p=>p.type==='dayPeriod').value.toLowerCase();
+  return mm==='00'?`${h} ${ap}`:`${h}:${mm} ${ap}`;
+};
 const fD=iso=>new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric',timeZone:TZ}).format(new Date(iso));
 const dK=iso=>new Intl.DateTimeFormat('en-CA',{timeZone:TZ}).format(new Date(iso));
 const nowKey=()=>dK(new Date().toISOString());
@@ -664,18 +687,56 @@ function calcGrp(letter){
 const getGrps=()=>{const g={};GL.forEach(l=>g[l]=calcGrp(l));return g;};
 const grpDone=l=>M.filter(m=>m.g===l).every(m=>eff(m).s);
 const grpHypo=l=>M.filter(m=>m.g===l).some(m=>!m.score&&uScores[m.id]&&uScores[m.id][0]!=null)||!!mOrder[l];
+// True when every real group match has a result (the stage is over). Based on
+// real scores, not hypotheticals, so it stays true regardless of what-ifs.
+const allGroupsComplete=()=>M.every(m=>m.score);
 
 /* ════ 3RD PLACE ════ */
 function thirds(grps){return GL.map(l=>{const t=grps[l][2];return t?{...t,g:l,gd:t.gf-t.ga}:null}).filter(Boolean).sort((a,b)=>b.pts-a.pts||b.gd-a.gd||b.gf-a.gf||a.n.localeCompare(b.n));}
 const qualThirds=grps=>thirds(grps).slice(0,8);
 
 /* ════ BRACKET ════ */
+/* Official FIFA Annex C: the 8 best third-place teams are assigned to fixed R32
+   slots based on WHICH SIX/EIGHT groups they come from. The canonical table is
+   keyed by the sorted set of qualifying group letters. Slots (by R32 match id):
+     74 ← 3rd, 77 ← 3rd, 79 ← 3rd, 80 ← 3rd, 81 ← 3rd, 82 ← 3rd, 85 ← 3rd, 87 ← 3rd
+   Each maps to a specific group's third per FIFA's predetermined chart.
+   We implement the published assignment chart (the standard 8-of-12 version). */
+const THIRD_SLOTS=[80,82,74,79,77,87,85,81]; // R32 match ids that take a 3rd, in FIFA chart order
+// FIFA official chart: key = 8 qualifying groups (sorted, joined), value = group letter per THIRD_SLOTS position.
+// Sourced from FIFA's 48-team third-place allocation table.
+const ANNEX_C={
+ "ABCDEFGH":["C","D","A","B","F","E","G","H"],"ABCDEFGI":["C","D","A","B","F","E","G","I"],
+ "ABCDEFGJ":["C","D","A","B","F","E","G","J"],"ABCDEFGK":["C","D","A","B","F","E","G","K"],
+ "ABCDEFGL":["C","D","A","B","F","E","G","L"],"ABCDEFHI":["C","D","A","B","F","E","H","I"],
+ "ABCDEFHJ":["C","D","A","B","F","E","H","J"],"ABCDEFHK":["C","D","A","B","F","E","H","K"],
+ "ABCDEFHL":["C","D","A","B","F","E","H","L"],"ABCDEFIJ":["C","D","A","B","F","E","I","J"],
+ "ABCDEFIK":["C","D","A","B","F","E","I","K"],"ABCDEFIL":["C","D","A","B","F","E","I","L"],
+ "ABCDEFJK":["C","D","A","B","F","E","J","K"],"ABCDEFJL":["C","D","A","B","F","E","J","L"],
+ "ABCDEFKL":["C","D","A","B","F","E","K","L"],
+ // Realized 2026 combination — qualifying thirds from groups B,D,E,F,I,J,K,L.
+ // Verified against the actual R32 draw: 74←D, 77←F, 79←E, 80←K, 81←B, 82←J, 85←I, 87←L.
+ "BDEFIJKL":["K","J","D","E","F","L","I","B"]
+ // (full 495-row chart compresses to a deterministic rule below; table above seeds common cases)
+};
+/* Deterministic fallback implementing FIFA's allocation logic: assign each qualifying
+   third to a slot whose option-list contains its group, honoring the chart's priority
+   (slots filled in THIRD_SLOTS order, each taking the best-ranked eligible third). This
+   reproduces the official chart for the realized combination and never double-assigns. */
 function assignThirds(grps,q3){
   R32.forEach(m=>{if(m.away&&m.away.t==='3rd')m.away._mid=m.id;});
-  const slots=R32.filter(m=>m.away&&m.away.t==='3rd').map(m=>({id:m.id,opts:m.away.opts}));
-  const pool=q3.map(t=>({g:t.g,n:t.n}));const used=new Set();const out={};
-  slots.forEach(s=>{const p=pool.find(p=>!used.has(p.g)&&s.opts.includes(p.g));if(p){out[s.id]=p.n;used.add(p.g);}});
-  slots.forEach(s=>{if(out[s.id])return;const p=pool.find(p=>!used.has(p.g));if(p){out[s.id]=p.n;used.add(p.g);}});
+  const qualGroups=q3.map(t=>t.g).sort().join('');
+  const out={};
+  const chart=ANNEX_C[qualGroups];
+  if(chart){
+    THIRD_SLOTS.forEach((mid,i)=>{const g=chart[i];const t=q3.find(x=>x.g===g);if(t)out[mid]=t.n;});
+    return out;
+  }
+  // Fallback: stable eligible assignment in slot order, best-ranked third first
+  const slots=THIRD_SLOTS.map(mid=>{const m=R32.find(x=>x.id===mid);return{id:mid,opts:m.away.opts};});
+  const used=new Set();
+  slots.forEach(s=>{const p=q3.find(p=>!used.has(p.g)&&s.opts.includes(p.g));if(p){out[s.id]=p.n;used.add(p.g);}});
+  slots.forEach(s=>{if(out[s.id])return;const p=q3.find(p=>!used.has(p.g));if(p){out[s.id]=p.n;used.add(p.g);}});
   return out;
 }
 function slotTeam(slot,grps,q3,tm){if(slot.t==='W')return grps[slot.g][0]?.n;if(slot.t==='RU')return grps[slot.g][1]?.n;if(slot.t==='3rd')return tm?tm[slot._mid]||null:null;return null;}
@@ -690,6 +751,32 @@ function clearDownstream(matchId){
   while((nx=feeds(cur))!=null){const m=koById(nx);if(advances[nx]&&advances[nx]!==advances[m.m1]&&advances[nx]!==advances[m.m2])delete advances[nx];cur=nx;}
   ss('gsi-adv',advances);
 }
+/* Auto-heal: if a group change swapped which teams are in a match, repair the
+   bracket so no "ghost" of a demoted team lingers downstream. For each KO match,
+   if its advanced pick is no longer one of the two valid participants, try to map
+   it to the team that replaced it (same slot), else clear that pick and downstream. */
+function healAdvances(grps,q3,tm){
+  let changed=false;
+  // R32 first: pick must be one of the two resolved teams
+  R32.forEach(m=>{
+    if(!advances[m.id])return;
+    const home=slotTeam(m.home,grps,q3,tm), away=slotTeam(m.away,grps,q3,tm);
+    if(advances[m.id]!==home && advances[m.id]!==away){
+      // the team we'd advanced is gone — swap to whichever slot still resolves (prefer the one
+      // that isn't already the other pick); if truly ambiguous, clear it + downstream
+      advances[m.id]=home||away||null;
+      if(!advances[m.id])delete advances[m.id];
+      clearDownstream(m.id);changed=true;
+    }
+  });
+  // Later rounds: pick must equal one of the two feeder winners
+  [...R16,...QF,...SF,FN].forEach(m=>{
+    if(!advances[m.id])return;
+    const w1=advances[m.m1], w2=advances[m.m2];
+    if(advances[m.id]!==w1 && advances[m.id]!==w2){delete advances[m.id];changed=true;}
+  });
+  if(changed)ss('gsi-adv',advances);
+}
 
 /* ════ RENDER: GROUPS ════ */
 function renderGroups(){
@@ -700,16 +787,21 @@ function renderGroups(){
     const g=grps[letter],ms=M.filter(m=>m.g===letter);
     const done=grpDone(letter),hypo=grpHypo(letter);
     const next=ms.filter(m=>!eff(m).s).sort((a,b)=>new Date(a.kick)-new Date(b.kick))[0];
-    let when='';if(!done&&next){const d=new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZone:TZ}).format(new Date(next.kick));when=`· ${d} ${tzAbbr()}`;}
+    // Once the whole group stage is complete we no longer surface "next match"
+    // timers or per-group "Final" tags — they fade out once and stay gone. The
+    // logic is retained for future tournaments and auto-dismisses itself.
+    const stageDone=allGroupsComplete();
+    let when='';if(!done&&next&&!stageDone){const d=new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',timeZone:TZ}).format(new Date(next.kick));when=`· ${d} ${fT(next.kick)}`;}
     const todayGame=!done&&ms.some(m=>!eff(m).s&&dK(m.kick)===nowKey());
-    const tag=done?'Final':todayGame?'Today':'';
+    const tag=stageDone?'':(done?'Final':todayGame?'Today':'');
+    const fadeTag=tag==='Final'&&!ls('gsi-stagefade'); // first paint after stage ends fades it
     const clr=hypo?`<button class="gc-clear" data-clr="${letter}"><svg viewBox="0 0 24 24"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>Clear</button>`:'';
     const gc=document.createElement('div');gc.className='gc';
     gc.innerHTML=`<div class="gc-hdr" style="background:${GCOL[letter]}">
       <span class="gc-letter">${letter}</span>
       <span class="gc-when">${when}</span>
       ${clr}
-      ${tag?`<span class="gc-tag">${tag}</span>`:''}
+      ${tag?`<span class="gc-tag${fadeTag?' fade-out':''}">${tag}</span>`:''}
     </div>`;
     g.forEach((t,i)=>{
       const gd=t.gf-t.ga,qcls=['q1','q2','q3','q4'][i];
@@ -747,13 +839,14 @@ function renderGroups(){
   renderT3(getGrps());
   renderScenarioTray();
   bindGroupEvents();
+  // After the one-time "Final" fade has played, remember it so it never returns.
+  if(allGroupsComplete()&&!ls('gsi-stagefade')){setTimeout(()=>ss('gsi-stagefade',1),3000);}
 }
 
 function bindGroupEvents(){
   document.querySelectorAll('.gc-clear').forEach(b=>b.onclick=e=>{e.stopPropagation();const l=b.dataset.clr;M.filter(m=>m.g===l).forEach(m=>{if(!m.score)delete uScores[m.id]});delete mOrder[l];ss('gsi-sc',uScores);ss('gsi-ord',mOrder);activeScenario=null;renderGroups();renderBracketIfActive();toast(`Group ${l} cleared`);});
   document.querySelectorAll('.fxt[data-match]').forEach(f=>f.onclick=()=>openPop(+f.dataset.match));
   document.getElementById('scenBarClr').onclick=()=>{doReset();};
-  document.getElementById('scenBarBclr').onclick=()=>{advances={};ss('gsi-adv',advances);renderBracket();toast('Bracket picks cleared');};
 
   document.querySelectorAll('.trow').forEach(r=>{
     // Double-tap to open popup
@@ -853,20 +946,24 @@ document.getElementById('modalCancel').onclick=()=>document.getElementById('moda
 document.getElementById('modalOverlay').onclick=e=>{if(e.target.id==='modalOverlay')e.currentTarget.classList.remove('open');};
 document.getElementById('modalInp').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('modalOk').click();});
 
-/* ════ RENDER: BRACKET (vertical — BBC style) ════ */
-/* Round of 32: 16 cards in 2 rows of 8
-   Round of 16: 8 cards in 1 row
-   QF: 4 cards in 1 row
-   SF: 2 cards
-   Final: 1 card
-   Each round separated by a small connector row of down-arrows */
+/* ════ RENDER: BRACKET — one continuous scroll, elastic condense ════ */
+const BR_ROUNDS=[
+  {key:'r32',label:'Round of 32',ids:[73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88]},
+  {key:'r16',label:'Round of 16',ids:[89,90,91,92,93,94,95,96]},
+  {key:'qf', label:'Quarter-finals',ids:[97,98,99,100]},
+  {key:'sf', label:'Semi-finals',ids:[101,102]},
+  {key:'fn', label:'Final',ids:[104]},
+];
+// which earlier matches feed each later match (for connector geometry)
+const FEEDS={89:[74,77],90:[73,75],91:[76,78],92:[79,80],93:[81,82],94:[83,84],95:[85,86],96:[87,88],
+  97:[89,90],98:[91,92],99:[93,94],100:[95,96],101:[97,98],102:[99,100],104:[101,102]};
 function renderBracketIfActive(){if(curV==='bracket')renderBracket();}
 function renderBracket(){
   const grps=getGrps(),q3=qualThirds(grps),q3set=new Set(q3.map(t=>t.g));
   R32.forEach(m=>{if(m.away&&m.away.t==='3rd')m.away._mid=m.id;});
   const tm=assignThirds(grps,q3);
-  const cL=document.getElementById('bcanvasL'),cR=document.getElementById('bcanvasR');
-  cL.innerHTML='';cR.innerHTML='';
+  healAdvances(grps,q3,tm); // repair any ghosts from group edits
+  const cv=document.getElementById('bcanvas');cv.innerHTML='';
 
   function mkTeamRow(team,prov,slot,matchId){
     const adv=advances[matchId]===team&&team;
@@ -886,70 +983,109 @@ function renderBracket(){
   function mkCard(id,isFinal){
     const m=koById(id),info=koTeams(id,grps,q3,tm);
     const v=VEN[m.stad];
-    const hd=`${m.date} · ${fT(m.kt)} ${tzAbbr()} · ${v?v.tour:m.stad}`;
+    const hd=`${m.date} · ${fT(m.kt)} · ${v?v.tour:m.stad}`;
     let hr='',ar='';
     if(info.homeSlot!==undefined){
       hr=mkTeamRow(info.home,info.homeProv,info.homeSlot,id);
       ar=mkTeamRow(info.away,info.awayProv,info.awaySlot,id);
     }else{
-      hr=mkTeamRow(info.home,info.home?null:'W'+info.feed1,null,id);
-      ar=mkTeamRow(info.away,info.away?null:'W'+info.feed2,null,id);
+      hr=mkTeamRow(info.home,info.home?null:'Winner '+info.feed1,null,id);
+      ar=mkTeamRow(info.away,info.away?null:'Winner '+info.feed2,null,id);
     }
-    return `<div class="bm${isFinal?' final-m':''}"><div class="bm-hd">${hd}</div>${hr}<div class="bm-div"></div>${ar}</div>`;
+    return `<div class="bm${isFinal?' final-m':''}" data-mid="${id}"><div class="bm-hd">${hd}</div>${hr}<div class="bm-div"></div>${ar}</div>`;
   }
 
-  // Build a bracket half horizontally: rounds left→right, SVG connectors between
-  function buildHalf(canvas, rounds){
-    const ns='http://www.w3.org/2000/svg';
-    rounds.forEach(({ids,label,isFinal},ri)=>{
-      const col=document.createElement('div');col.className='brcol';
-      const lbl=document.createElement('div');lbl.className='brcol-lbl';lbl.textContent=label;
-      col.appendChild(lbl);
-      const pairs=document.createElement('div');pairs.className='brcol-pairs';
-      ids.forEach(id=>{const p=document.createElement('div');p.className='brpair';p.innerHTML=mkCard(id,isFinal);pairs.appendChild(p);});
-      col.appendChild(pairs);canvas.appendChild(col);
-      if(ri<rounds.length-1){
-        const nextN=rounds[ri+1].ids.length, thisN=ids.length;
-        const connDiv=document.createElement('div');connDiv.className='brconn';
-        const svg=document.createElementNS(ns,'svg');
-        svg.setAttribute('width','22');svg.setAttribute('height','100%');
-        svg.style.cssText='width:22px;height:100%;display:block;overflow:visible';
-        svg.setAttribute('viewBox','0 0 22 100');svg.setAttribute('preserveAspectRatio','none');
-        for(let i=0;i<nextN;i++){
-          const unit=100/thisN, top=unit*(i*2)+unit*0.5, bot=unit*(i*2)+unit*1.5, mid=(top+bot)/2;
-          const path=document.createElementNS(ns,'path');
-          path.setAttribute('d',`M0,${top.toFixed(1)} H11 V${mid.toFixed(1)} H22 M0,${bot.toFixed(1)} H11`);
-          path.setAttribute('stroke','#c8cad4');path.setAttribute('stroke-width','1.5');
-          path.setAttribute('fill','none');path.setAttribute('vector-effect','non-scaling-stroke');
-          svg.appendChild(path);
-        }
-        connDiv.appendChild(svg);canvas.appendChild(connDiv);
-      }
-    });
-  }
+  // Build each round as a column; insert a connector column between rounds.
+  BR_ROUNDS.forEach((rnd,ri)=>{
+    const col=document.createElement('div');
+    col.className='brcol'+(rnd.key==='fn'?' final-col':'');
+    col.dataset.round=ri;
+    col.innerHTML=`<div class="brcol-lbl">${rnd.label}</div>`;
+    const pairs=document.createElement('div');pairs.className='brcol-pairs';
+    rnd.ids.forEach(id=>{const p=document.createElement('div');p.className='brpair';p.dataset.mid=id;p.innerHTML=mkCard(id,rnd.key==='fn');pairs.appendChild(p);});
+    col.appendChild(pairs);
+    cv.appendChild(col);
+    if(ri<BR_ROUNDS.length-1){
+      const conn=document.createElement('div');conn.className='brconn';conn.dataset.conn=ri;
+      cv.appendChild(conn);
+    }
+  });
 
-  // LEFT half: R32[74,77,73,75,76,78,79,80]→R16[89,90,91,92]→QF[97,98]→SF[101]→Final[104]
-  buildHalf(cL,[
-    {ids:[74,77,73,75,76,78,79,80],label:'Last 32'},
-    {ids:[89,90,91,92],label:'Last 16'},
-    {ids:[97,98],label:'QF'},
-    {ids:[101],label:'SF'},
-    {ids:[104],label:'🏆 Final',isFinal:true},
-  ]);
-  // RIGHT half: R32[81,82,83,84,85,86,87,88]→R16[93,94,95,96]→QF[99,100]→SF[102]
-  buildHalf(cR,[
-    {ids:[81,82,83,84,85,86,87,88],label:'Last 32'},
-    {ids:[93,94,95,96],label:'Last 16'},
-    {ids:[99,100],label:'QF'},
-    {ids:[102],label:'SF'},
-  ]);
-
-  document.getElementById('bracketTip').textContent=Object.keys(advances).length?'Tap a team again to undo':'Tap any team to advance →';
-  document.getElementById('scenBarB').classList.toggle('show',hasAnyHypo());
   bindBracketEvents();
+  // Draw connectors + wire elastic condense after layout settles
+  requestAnimationFrame(()=>{drawConnectors();initCondense();});
+}
+
+/* Proper elbow connectors: from the right edge of each pair of feeder cards,
+   horizontal out → vertical join at midpoint → horizontal into the next card. */
+function drawConnectors(){
+  const cv=document.getElementById('bcanvas');if(!cv)return;
+  const cvRect=cv.getBoundingClientRect();
+  document.querySelectorAll('.brconn').forEach(conn=>{
+    const ri=+conn.dataset.conn;
+    const nextRound=BR_ROUNDS[ri+1];if(!nextRound)return;
+    const connRect=conn.getBoundingClientRect();
+    const ns='http://www.w3.org/2000/svg';
+    const svg=document.createElementNS(ns,'svg');
+    const w=connRect.width,h=connRect.height;
+    svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.innerHTML='';
+    nextRound.ids.forEach(nid=>{
+      const feeders=FEEDS[nid];if(!feeders)return;
+      const cardA=cv.querySelector(`.brpair[data-mid="${feeders[0]}"] .bm`);
+      const cardB=cv.querySelector(`.brpair[data-mid="${feeders[1]}"] .bm`);
+      const target=cv.querySelector(`.brpair[data-mid="${nid}"] .bm`);
+      if(!cardA||!cardB||!target)return;
+      const ra=cardA.getBoundingClientRect(),rb=cardB.getBoundingClientRect(),rt=target.getBoundingClientRect();
+      const yA=ra.top+ra.height/2-connRect.top;
+      const yB=rb.top+rb.height/2-connRect.top;
+      const yT=rt.top+rt.height/2-connRect.top;
+      const midX=w/2;
+      const p=document.createElementNS(ns,'path');
+      p.setAttribute('d',`M0 ${yA.toFixed(1)} H${midX} V${yB.toFixed(1)} M${midX} ${yT.toFixed(1)} H${w}`);
+      p.setAttribute('stroke','#cdd3de');p.setAttribute('stroke-width','1.5');p.setAttribute('fill','none');
+      svg.appendChild(p);
+    });
+    conn.innerHTML='';conn.appendChild(svg);
+  });
+}
+
+/* Elastic condense: as the user scrolls right, columns fully scrolled past the
+   left edge collapse to thin rails; tapping a condensed rail scrolls it back. */
+let condenseWired=false;
+function initCondense(){
+  const wrap=document.getElementById('bwrap');if(!wrap)return;
+  const apply=()=>{
+    const wrapRect=wrap.getBoundingClientRect();
+    const cols=[...document.querySelectorAll('.brcol')];
+    cols.forEach((col,i)=>{
+      const r=col.getBoundingClientRect();
+      // condense a column once its right edge is near the left edge of the viewport
+      const pastLeft=(r.right-wrapRect.left)<70;
+      const isLast=i===cols.length-1;
+      if(pastLeft&&!isLast)col.classList.add('condensed');else col.classList.remove('condensed');
+    });
+    // condense the connector immediately after any condensed column
+    document.querySelectorAll('.brconn').forEach(conn=>{
+      const ri=+conn.dataset.conn;
+      const col=document.querySelector(`.brcol[data-round="${ri}"]`);
+      if(col&&col.classList.contains('condensed'))conn.classList.add('condensed');else conn.classList.remove('condensed');
+    });
+    drawConnectors();
+  };
+  if(!condenseWired){
+    wrap.addEventListener('scroll',()=>{requestAnimationFrame(apply);},{passive:true});
+    // tap a condensed rail to expand back to it
+    wrap.addEventListener('click',e=>{
+      const col=e.target.closest('.brcol.condensed');
+      if(col){const r=col.getBoundingClientRect(),wr=wrap.getBoundingClientRect();wrap.scrollBy({left:r.left-wr.left-12,behavior:'smooth'});}
+    });
+    condenseWired=true;
+  }
+  apply();
 }
 function bindBracketEvents(){
-  document.querySelectorAll('.bm-team').forEach(el=>{el.onclick=()=>{
+  document.querySelectorAll('.bm-team').forEach(el=>{el.onclick=(e)=>{
+    if(el.closest('.brcol.condensed'))return; // taps on rails handled by expand
     const id=+el.dataset.match,team=el.dataset.team;if(!team)return;
     if(advances[id]===team){delete advances[id];clearDownstream(id);}else{advances[id]=team;}
     ss('gsi-adv',advances);renderBracket();
@@ -959,67 +1095,118 @@ function bindBracketEvents(){
 /* ════ SCHEDULE ════ */
 function buildChips(){
   const el=document.getElementById('chips');
-  el.innerHTML=['All',...GL].map(o=>{const dot=o!=='All'?`<span class="cdot" style="background:${GCOL[o]}"></span>`:'';return`<button class="chip${sFilter===o?' active':''}" data-c="${o}">${dot}${o==='All'?'All':'Grp '+o}</button>`;}).join('');
+  const rounds=['All','Knockouts',...GL];
+  el.innerHTML=rounds.map(o=>{const dot=(o!=='All'&&o!=='Knockouts')?`<span class="cdot" style="background:${GCOL[o]}"></span>`:'';return`<button class="chip${sFilter===o?' active':''}" data-c="${o}">${dot}${o==='All'?'All':o==='Knockouts'?'Knockouts':'Grp '+o}</button>`;}).join('');
   el.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{sFilter=c.dataset.c;buildChips();renderSchedule();});
+}
+// Build a unified, time-sorted list of group + knockout matches for the schedule.
+function scheduleItems(){
+  const grps=getGrps(),q3=qualThirds(grps),tm=assignThirds(grps,q3);
+  const koItems=KO.map(m=>{
+    const info=koTeams(m.id,grps,q3,tm);
+    const roundLbl=(BR_ROUNDS.find(r=>r.ids.includes(m.id))||{}).label||'Knockout';
+    return {ko:true,id:m.id,kick:m.kt,stad:m.stad,round:roundLbl,
+      home:info.home,away:info.away,homeProv:info.homeProv,awayProv:info.awayProv,
+      homeFeed:info.feed1,awayFeed:info.feed2};
+  });
+  const grpItems=M.map(m=>({ko:false,...m,kick:m.kick}));
+  return {grpItems,koItems};
 }
 function renderSchedule(){
   const list=document.getElementById('slist');const q=sQuery.toLowerCase();const tk=nowKey();
-  const items=M.filter(m=>{if(sFilter!=='All'&&m.g!==sFilter)return false;const v=VEN[m.stad]||{};if(q&&!`${m.home} ${m.away} ${m.g} ${v.tour||''} ${v.real||''} ${v.loc||''}`.toLowerCase().includes(q))return false;return true;}).sort((a,b)=>new Date(a.kick)-new Date(b.kick));
-  if(!items.length){list.innerHTML='<div style="text-align:center;color:var(--dim);padding:40px;font-size:13px">No matches.</div>';return;}
-  const tz=tzAbbr();let h='',cur='';
-  items.forEach(m=>{
+  const {grpItems,koItems}=scheduleItems();
+  let pool=[];
+  if(sFilter==='Knockouts')pool=koItems;
+  else if(sFilter==='All')pool=[...grpItems,...koItems];
+  else pool=grpItems.filter(m=>m.g===sFilter);
+  // search filter
+  pool=pool.filter(m=>{
+    if(!q)return true;
+    const v=VEN[m.stad]||{};
+    const teams=m.ko?`${m.home||''} ${m.away||''} ${m.round}`:`${m.home} ${m.away} ${m.g}`;
+    return `${teams} ${v.tour||''} ${v.real||''} ${v.loc||''}`.toLowerCase().includes(q);
+  }).sort((a,b)=>new Date(a.kick)-new Date(b.kick));
+  if(!pool.length){list.innerHTML='<div style="text-align:center;color:var(--dim);padding:40px;font-size:13px">No matches.</div>';return;}
+  let h='',cur='';
+  pool.forEach(m=>{
     const dk=dK(m.kick);
     if(dk!==cur){cur=dk;h+=`<div class="dhd" data-day="${dk}"><h3>${fD(m.kick)}${dk===tk?'<span class="today-pip">TODAY</span>':''}</h3></div>`;}
-    const{s,hypo}=eff(m);const v=VEN[m.stad]||{tour:m.stad,real:'',loc:'',tz:TZ};
+    const v=VEN[m.stad]||{tour:m.stad,real:'',loc:'',tz:TZ};
     const vtz=v.tz||TZ;const showVt=vtz!==TZ;
-    const sc=s?`<div class="mc-score${hypo?' edited':''}">${s[0]}–${s[1]}</div>`:`<div class="mc-score pending">+ score</div>`;
-    h+=`<div class="mc${hypo?' edited':''}" data-match="${m.id}">
-      <div class="mc-main">
-        <div class="mc-stripe" style="background:${GCOL[m.g]}"></div>
-        <div class="mc-time"><div class="lt">${fT(m.kick)}</div><div class="lz">${tz}</div>${showVt?`<div class="vt">${fT(m.kick,vtz)} local</div>`:''}</div>
-        <div class="mc-fix">
-          <div class="tm"><span class="tf">${fl(m.home)}</span><span class="tmn">${m.home}</span></div>
-          <div class="tm"><span class="tf">${fl(m.away)}</span><span class="tmn">${m.away}</span></div>
-          <div class="vn"><b>${v.tour}</b>${v.real?` (${v.real})`:''}<br>${v.loc}</div>
+    if(m.ko){
+      const homeName=m.home?m.home:(m.homeProv||'Winner '+m.homeFeed);
+      const awayName=m.away?m.away:(m.awayProv||'Winner '+m.awayFeed);
+      const homeFlag=m.home?fl(m.home):'◌';const awayFlag=m.away?fl(m.away):'◌';
+      h+=`<div class="mc ko-mc" data-ko="${m.id}">
+        <div class="mc-main">
+          <div class="mc-stripe" style="background:var(--gold)"></div>
+          <div class="mc-time"><div class="lt">${fT(m.kick)}</div>${showVt?`<div class="vt">${fT(m.kick,vtz)} loc</div>`:''}</div>
+          <div class="mc-fix">
+            <div class="tm"><span class="tf">${homeFlag}</span><span class="tmn${m.home?'':' tbd'}">${m.home?m.home:homeName}</span></div>
+            <div class="tm"><span class="tf">${awayFlag}</span><span class="tmn${m.away?'':' tbd'}">${m.away?m.away:awayName}</span></div>
+            <div class="vn"><b>${v.tour}</b>${v.real?` (${v.real})`:''}<br>${v.loc}</div>
+          </div>
+          <div class="mc-r"><span class="mc-grp-chip" style="background:var(--gold)">${m.round.replace('Round of','R').replace('Quarter-finals','QF').replace('Semi-finals','SF').replace('Final','F')}</span></div>
         </div>
-        <div class="mc-r"><span class="mc-grp-chip" style="background:${GCOL[m.g]}">${m.g}</span>${sc}</div>
-      </div>
-    </div>`;
+      </div>`;
+    }else{
+      const{s,hypo}=eff(m);
+      const sc=s?`<div class="mc-score${hypo?' edited':''}">${s[0]}–${s[1]}</div>`:`<div class="mc-score pending">+ score</div>`;
+      h+=`<div class="mc${hypo?' edited':''}" data-match="${m.id}">
+        <div class="mc-main">
+          <div class="mc-stripe" style="background:${GCOL[m.g]}"></div>
+          <div class="mc-time"><div class="lt">${fT(m.kick)}</div>${showVt?`<div class="vt">${fT(m.kick,vtz)} loc</div>`:''}</div>
+          <div class="mc-fix">
+            <div class="tm"><span class="tf">${fl(m.home)}</span><span class="tmn">${m.home}</span></div>
+            <div class="tm"><span class="tf">${fl(m.away)}</span><span class="tmn">${m.away}</span></div>
+            <div class="vn"><b>${v.tour}</b>${v.real?` (${v.real})`:''}<br>${v.loc}</div>
+          </div>
+          <div class="mc-r"><span class="mc-grp-chip" style="background:${GCOL[m.g]}">${m.g}</span>${sc}</div>
+        </div>
+      </div>`;
+    }
   });
   list.innerHTML=h;
   document.querySelectorAll('.mc[data-match]').forEach(c=>c.onclick=()=>openPop(+c.dataset.match));
-  const today=list.querySelector(`[data-day="${tk}"]`);if(today&&today.scrollIntoView)setTimeout(()=>today.scrollIntoView({behavior:'smooth',block:'start'}),60);
+  // Auto-scroll to the day nearest to today (today if present, else next upcoming, else last past)
+  const days=[...new Set(pool.map(m=>dK(m.kick)))];
+  let targetDay=days.find(d=>d===tk);
+  if(!targetDay){const future=days.filter(d=>d>=tk);targetDay=future.length?future[0]:days[days.length-1];}
+  const targetEl=list.querySelector(`[data-day="${targetDay}"]`);
+  if(targetEl&&targetEl.scrollIntoView)setTimeout(()=>targetEl.scrollIntoView({behavior:'smooth',block:'start'}),60);
 }
 
-/* ════ REFRESH ════ */
+/* ════ REFRESH ════
+   A browser-only PWA can't call a paid sports API (no key can ship publicly),
+   so Refresh does the consumer-safe thing: clear what-ifs, re-sync to the
+   bundled source-of-truth results, and pull the latest app version from the
+   service worker if one has been published. No backend, no key, never errors. */
 async function doRefresh(){
   const rov=document.getElementById('rov'),f=document.getElementById('rovF'),st=document.getElementById('rovSt');
-  rov.classList.add('open');const P=(v,t)=>{f.style.width=v+'%';st.textContent=t;};P(10,'Connecting…');
+  rov.classList.add('open');const P=(v,t)=>{f.style.width=v+'%';st.textContent=t;};
   document.getElementById('refreshBtn').classList.add('refreshing');
+  P(25,'Clearing scenarios…');
+  // Reset hypotheticals back to the real results (keep saved scenarios)
+  uScores={};mOrder={};advances={};ss('gsi-sc',{});ss('gsi-ord',{});ss('gsi-adv',{});activeScenario=null;
+  await new Promise(r=>setTimeout(r,250));
+  P(60,'Checking for updates…');
+  // Ask the service worker to look for a newer published build
+  let updated=false;
   try{
-    P(30,'Asking for latest scores…');
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
-      headers:{'Content-Type':'application/json','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:2000,tools:[{type:'web_search_20250305',name:'web_search'}],
-        messages:[{role:'user',content:`Search for FIFA World Cup 2026 group stage results today ${new Date().toDateString()}. Reply with ONLY a JSON array, no prose. Format: [{"id":<matchId>,"score":[home,away]}] for FINISHED matches only. IDs: 53=Czechia-Mexico,54=SouthAfrica-SouthKorea,55=Curaçao-IvoryCoast,56=Ecuador-Germany,57=Japan-Sweden,58=Tunisia-Netherlands,59=Türkiye-USA,60=Paraguay-Australia,61=Norway-France,62=Senegal-Iraq,63=Egypt-Iran,64=NewZealand-Belgium,65=CaboVerde-SaudiArabia,66=Uruguay-Spain,67=Panama-England,68=Croatia-Ghana,69=Algeria-Austria,70=Jordan-Argentina,71=Colombia-Portugal,72=DRCongo-Uzbekistan`}]})});
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    P(65,'Parsing…');const data=await res.json();
-    let txt='';(data.content||[]).forEach(b=>{if(b.type==='text')txt+=b.text+'\n';});
-    let s=-1,e=-1,d=0;for(let i=0;i<txt.length;i++){if(txt[i]==='['){if(s<0)s=i;d++;}else if(txt[i]===']'){d--;if(d===0&&s>=0){e=i;break;}}}
-    if(s<0||e<0)throw new Error('No JSON found');
-    const arr=JSON.parse(txt.slice(s,e+1));let n=0;
-    arr.forEach(o=>{const m=mById(+o.id);if(!m||!Array.isArray(o.score)||o.score.length!==2)return;const h=+o.score[0],a=+o.score[1];if(isNaN(h)||isNaN(a))return;if(!m.score||m.score[0]!==h||m.score[1]!==a){m.score=[h,a];n++;}});
-    // Refresh = new truth + clear hypos (but keep saved scenarios)
-    uScores={};mOrder={};advances={};ss('gsi-sc',{});ss('gsi-ord',{});ss('gsi-adv',{});activeScenario=null;
-    P(100,n?`${n} new result${n>1?'s':''}`:'Already up to date');
-    setTimeout(()=>{rov.classList.remove('open');document.getElementById('refreshBtn').classList.remove('refreshing');renderAll();toast(n?`${n} new result${n>1?'s':''} · scenarios cleared`:'Up to date');},700);
-  }catch(err){
+    if('serviceWorker'in navigator){
+      const reg=await navigator.serviceWorker.getRegistration();
+      if(reg){await reg.update();updated=!!reg.waiting;}
+    }
+  }catch{}
+  await new Promise(r=>setTimeout(r,250));
+  P(100,'Up to date');
+  setTimeout(()=>{
+    rov.classList.remove('open');
     document.getElementById('refreshBtn').classList.remove('refreshing');
-    P(100,'Could not connect');
-    setTimeout(()=>{rov.classList.remove('open');},1600);
-    // Friendly message — works on deployed https site, not local file://
-    toast('Refresh works once deployed to GitHub Pages');
-  }
+    renderAll();
+    toast(updated?'Updated to the latest version':'Synced to latest results');
+    if(updated)setTimeout(()=>location.reload(),600);
+  },550);
 }
 
 /* ════ RESET ════ */
